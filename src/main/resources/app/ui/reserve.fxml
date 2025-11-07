@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/25"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="app.ui.controller.ReserveController"
+            prefWidth="900" prefHeight="600">
+
+    <!-- شريط علوي -->
+    <top>
+        <HBox spacing="8" BorderPane.alignment="CENTER_LEFT">
+            <children>
+                <Button text="Back" onAction="#goHome"/>
+                <Label text="Reserve a Spot" style="-fx-font-size:16; -fx-font-weight:bold;"/>
+            </children>
+            <padding><Insets top="12" right="12" bottom="12" left="12"/></padding>
+        </HBox>
+    </top>
+
+    <!-- المحتوى -->
+    <center>
+        <VBox spacing="16" alignment="TOP_CENTER">
+            <children>
+
+                <!-- صورة الموقف المختار -->
+                <ImageView fx:id="lotImage" fitWidth="640" fitHeight="240" preserveRatio="true" smooth="true"/>
+
+                <!-- معلومات سريعة -->
+                <HBox spacing="18">
+                    <children>
+                        <Label fx:id="lotName"     style="-fx-font-weight:bold; -fx-font-size:14;"/>
+                        <Label text="•"/>
+                        <Label fx:id="lotLocation" style="-fx-text-fill:#666;"/>
+                        <Label text="•"/>
+                        <Label fx:id="lotRate"     />
+                    </children>
+                </HBox>
+
+                <Separator prefWidth="760"/>
+
+                <!-- اختيار المدة والوقت -->
+                <GridPane hgap="14" vgap="14">
+                    <columnConstraints>
+                        <ColumnConstraints percentWidth="35"/>
+                        <ColumnConstraints percentWidth="65"/>
+                    </columnConstraints>
+
+                    <children>
+                        <Label text="Parking Duration in hours:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                        <HBox spacing="8" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                            <children>
+                                <ChoiceBox fx:id="durationChoice" prefWidth="140"/>
+                                <Label fx:id="priceLabel" style="-fx-font-weight:bold;"/>
+                            </children>
+                        </HBox>
+
+                        <Label text="Start Time:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                        <ChoiceBox fx:id="startTimeChoice" prefWidth="140" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                    </children>
+                </GridPane>
+
+                <!-- زر التأكيد -->
+                <Button text="Confirm Reservation" onAction="#confirm" defaultButton="true"/>
+
+            </children>
+            <padding><Insets top="12" right="12" bottom="24" left="12"/></padding>
+        </VBox>
+    </center>
+
+</BorderPane>

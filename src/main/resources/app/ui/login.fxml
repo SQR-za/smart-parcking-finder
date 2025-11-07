@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="app.ui.controller.LoginController" stylesheets="@styles.css">
+    <center>
+        <VBox spacing="10" alignment="CENTER" prefWidth="420">
+            <Label text="Smart Parking" styleClass="title"/>
+            <TextField fx:id="usernameField" promptText="Username" maxWidth="240"/>
+            <PasswordField fx:id="passwordField" promptText="Password" maxWidth="240"/>
+            <Button text="Login" onAction="#onLogin" maxWidth="240"/>
+        </VBox>
+    </center>
+    <padding><Insets top="24" right="24" bottom="24" left="24"/></padding>
+</BorderPane>

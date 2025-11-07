@@ -1,0 +1,17 @@
+.root { -fx-font-family: "SF Pro Text", "Segoe UI", "Arial"; }
+.title { -fx-font-size: 15px; -fx-font-weight: 700; }
+.subtle { -fx-text-fill: #666; }
+.card {
+    -fx-background-color: white;
+    -fx-background-radius: 12;
+    -fx-border-radius: 12;
+    -fx-border-color: #e6e6e6;
+    -fx-padding: 10;
+}
+.card-btn { -fx-background-radius: 10; -fx-padding: 6 14 6 14; }
+.topbar { -fx-background-color: transparent; }
+.avatar {
+    -fx-background-color: linear-gradient(to bottom, #e9e9e9, #d9d9d9);
+    -fx-background-radius: 12;
+    -fx-border-color: #c9c9c9; -fx-border-radius: 12;
+}
