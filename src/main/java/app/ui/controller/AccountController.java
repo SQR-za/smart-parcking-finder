@@ -41,12 +41,16 @@ public class AccountController {
 
         // احسب الحالة
         LocalDateTime now = LocalDateTime.now();
-        String statusText;
+        String statusText = "";
         if (now.isBefore(res.start)) {
             statusText = "Upcoming — starts at " + timeFmt.format(res.start);
         } else if (now.isBefore(res.end())) {
             statusText = "Active — until " + timeFmt.format(res.end());
-        } else {
+        } else if (AppState.lastReservation == null) {
+            reservationsTable.getItems().clear();
+            noReservationsLabel.setVisible(true);
+        }
+        else {
             statusText = "Completed — ended at " + timeFmt.format(res.end());
         }
 

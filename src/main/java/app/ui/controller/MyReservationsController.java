@@ -16,28 +16,38 @@ public class MyReservationsController {
 
     @FXML
     private void initialize() {
-        // لو ما فيه حجز محفوظ، اعمل واحد افتراضي لـ City Mall للعرض
-        if (AppState.lastReservation == null) {
-            LocalDateTime now = LocalDateTime.now();
-            AppState.lastReservation = new AppState.Reservation("City Mall", now, 2);
+        var rows = new app.dao.ReservationDAO().listAllHumanReadable();
+        if (rows.isEmpty()) {
+            colLocation.setText("");
+            colStatus.setText("No active reservations");
+            return;
         }
 
-        var res = AppState.lastReservation;
-        var lot = AppState.LOTS.getOrDefault(res.lotKey, new AppState.Lot(res.lotKey, "", 0, null));
+        // آخر حجز
+        var r = rows.get(0);
+        String lotKey = r[0];
+        long start = Long.parseLong(r[1]);
+        int hrs = Integer.parseInt(r[2]);
 
-        colLocation.setText(lot.name + (lot.location.isEmpty() ? "" : " — " + lot.location));
+        var startDT = java.time.Instant.ofEpochSecond(start)
+                .atZone(java.time.ZoneId.systemDefault()).toLocalDateTime();
+        var endDT = startDT.plusHours(hrs);
+        var now = java.time.LocalDateTime.now();
 
-        LocalDateTime now = LocalDateTime.now();
-        String status;
-        if (now.isBefore(res.start)) {
-            status = "Upcoming — starts at " + timeFmt.format(res.start);
-        } else if (now.isBefore(res.end())) {
-            status = "Active — until " + timeFmt.format(res.end());
-        } else {
-            status = "Completed — ended at " + timeFmt.format(res.end());
-        }
+        colLocation.setText(lotKey);
+
+        String status = now.isBefore(startDT)
+                ? "Upcoming — starts at " + java.time.format.DateTimeFormatter.ofPattern("HH:mm").format(startDT)
+                : (now.isBefore(endDT)
+                ? "Active — until " + java.time.format.DateTimeFormatter.ofPattern("HH:mm").format(endDT)
+                : "Completed — ended at " + java.time.format.DateTimeFormatter.ofPattern("HH:mm").format(endDT));
+
         colStatus.setText(status);
     }
 
-    @FXML private void goHome() { Router.go("home.fxml", "Smart Parking | Home"); }
+
+    @FXML
+    private void goHome() {
+        Router.go("home.fxml", "Smart Parking | Home");
+    }
 }

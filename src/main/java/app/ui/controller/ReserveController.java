@@ -58,20 +58,30 @@ public class ReserveController {
 
     @FXML
     private void confirm() {
-        // خزّن الحجز للعرض
-        var startStr = startTimeChoice.getValue(); // مثال "10:00"
-        int hour = Integer.parseInt(startStr.substring(0, 2));
-        int minute = Integer.parseInt(startStr.substring(3, 5));
-        var start = java.time.LocalDate.now().atTime(hour, minute);
+        try {
+            String lotKey = (app.AppState.selectedLotKey != null)
+                    ? app.AppState.selectedLotKey : "City Mall";
 
-        AppState.lastReservation = new AppState.Reservation(
-                AppState.selectedLotKey != null ? AppState.selectedLotKey : "City Mall",
-                start,
-                durationChoice.getValue() != null ? durationChoice.getValue() : 1
-        );
+            // من ChoiceBox "HH:mm"
+            String startStr = startTimeChoice.getValue(); // مثال "10:00"
+            int h = Integer.parseInt(startStr.substring(0,2));
+            int m = Integer.parseInt(startStr.substring(3,5));
+            long startEpoch = java.time.LocalDate.now()
+                    .atTime(h, m)
+                    .atZone(java.time.ZoneId.systemDefault())
+                    .toEpochSecond();
 
-        Router.go("my_reservations.fxml", "Smart Parking | My Reservations");
+            int hrs = (durationChoice.getValue() != null) ? durationChoice.getValue() : 1;
+
+            new app.dao.ReservationDAO().insert(lotKey, startEpoch, hrs);
+
+            app.Router.go("my_reservations.fxml", "Smart Parking | My Reservations");
+        } catch (Exception e) {
+            new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.ERROR,
+                    "Confirm failed: " + e.getMessage()).showAndWait();
+        }
     }
+
 
     @FXML private void goHome() {
         Router.go("home.fxml", "Smart Parking | Home");

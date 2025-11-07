@@ -23,6 +23,7 @@
    <top>
       <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
+            <Button text="My Reservations" onAction="#openReservationsEmpty"/>
             <Pane prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
             <VBox alignment="CENTER_RIGHT" prefHeight="200.0" prefWidth="100.0">
                <children>

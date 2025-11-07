@@ -1,65 +1,86 @@
 package app.ui.controller;
 
+import app.AppState;
 import app.Router;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import app.AppState;
 
+/**
+ * Home screen controller.
+ * يعتمد على أزرار في home.fxml مثل:
+ * - onAction="#reserveCityMall"
+ * - onAction="#reserveDowntownPlaza"
+ * - onAction="#reserveTechPark"
+ * - onAction="#reserveMetroStation"
+ * - onAction="#openReservationsEmpty"
+ * - (اختياري) onAction="#goHome" / "#goMyReservations" / "#goSettings" / "#goReserve"
+ */
 public class HomeController {
 
-    // Avatar
-    @FXML private ImageView imgAvatar;
-
-    // ImageViews للكروت
-    @FXML private ImageView imgCityMall, imgDowntownPlaza, imgTechPark, imgMetroStation;
-
-    // Labels للأسعار
-    @FXML private Label priceCityMall, priceDowntownPlaza, priceTechPark, priceMetroStation;
-
-    // Buttons (اختياري لو تبغى تتعامل معها مباشرة)
-    @FXML private Button btnCityMall, btnDowntownPlaza, btnTechPark, btnMetroStation;
-
+    // ====== أزرار Reserve لكل بطاقة ======
 
     @FXML
-    private void initialize() {
-        // تحميل الصور من resources (لو تغيّر الاسم عدّله هنا)
-        setImageSafe(imgAvatar, "/app/ui/img/avatar.png");
-        setImageSafe(imgCityMall, "/app/ui/img/city_mall.png");
-        setImageSafe(imgDowntownPlaza, "/app/ui/img/downtown_plaza.png");
-        setImageSafe(imgTechPark, "/app/ui/img/tech_park.png");
-        setImageSafe(imgMetroStation, "/app/ui/img/metro_station.png");
-
-        // ضبط الأسعار (نكتب بالدولار هنا عشان ما نهرب $ في FXML)
-        priceCityMall.setText("$5/hour");
-        priceDowntownPlaza.setText("$3/hour");
-        priceTechPark.setText("$4/hour");
-        priceMetroStation.setText("$6/hour");
+    private void reserveCityMall() {
+        AppState.selectedLotKey = "City Mall";
+        Router.go("reserve.fxml", "Smart Parking | Reserve");
     }
 
-    private void setImageSafe(ImageView view, String classpathUrl) {
-        try {
-            var url = getClass().getResource(classpathUrl);
-            if (url != null) {
-                view.setImage(new Image(url.toExternalForm()));
-            }
-        } catch (Exception ignored) {}
+    @FXML
+    private void reserveDowntownPlaza() {
+        AppState.selectedLotKey = "Downtown Plaza";
+        Router.go("reserve.fxml", "Smart Parking | Reserve");
     }
 
-    // أحداث الأزرار
-    @FXML private void reserveCityMall()       { goReserve(); }
-    @FXML private void reserveDowntownPlaza()  { goReserve(); }
-    @FXML private void reserveTechPark()       { goReserve(); }
-    @FXML private void reserveMetroStation()   { goReserve(); }
+    @FXML
+    private void reserveTechPark() {
+        AppState.selectedLotKey = "Tech Park";
+        Router.go("reserve.fxml", "Smart Parking | Reserve");
+    }
 
+    @FXML
+    private void reserveMetroStation() {
+        AppState.selectedLotKey = "Metro Station";
+        Router.go("reserve.fxml", "Smart Parking | Reserve");
+    }
+
+    /**
+     * دالة عامة في حال عندك زر "Reserve" بدون تحديد بطاقة معينة في الـFXML.
+     * إذا كانت AppState.selectedLotKey معيّنة مسبقًا من الصفحة الرئيسية سنستخدمها،
+     * وإلا نترك ReserveController يختار الافتراضي.
+     */
+    @FXML
     private void goReserve() {
         Router.go("reserve.fxml", "Smart Parking | Reserve");
     }
 
-    // تنقل شريط علوي (لو احتجته لاحقاً)
-    @FXML private void goHome()           { Router.go("home.fxml", "Smart Parking | Home"); }
-    @FXML private void goMyReservations() { Router.go("my_reservations.fxml", "Smart Parking | My Reservations"); }
-    @FXML private void goSettings()       { Router.go("settings.fxml", "Smart Parking | Settings"); }
+    // ====== زر My Reservations (يعرض الصفحة فاضية) ======
+
+    /**
+     * يفتح صفحة الحجوزات فارغة بشكل صريح:
+     * - يمسح أي حجز سابق
+     * - يرفع فلاغ forceEmptyReservations ليضمن أن الصفحة تعرض "No active reservations"
+     */
+    @FXML
+    private void openReservationsEmpty() {
+        AppState.lastReservation = null;            // امسح أي حجز محفوظ
+        AppState.forceEmptyReservations = true;     // اطلب عرضًا فارغًا لمرة واحدة
+        Router.go("my_reservations.fxml", "Smart Parking | My Reservations");
+    }
+
+    // ====== تنقّلات عامة (اختيارية حسب استخدامك في التولبار) ======
+
+    @FXML
+    private void goHome() {
+        Router.go("home.fxml", "Smart Parking | Home");
+    }
+
+    @FXML
+    private void goMyReservations() {
+        // يفتح صفحة الحجوزات بالحالة الحالية (بدون إجبارها على الفِراغ)
+        Router.go("my_reservations.fxml", "Smart Parking | My Reservations");
+    }
+
+    @FXML
+    private void goSettings() {
+        Router.go("settings.fxml", "Smart Parking | Settings");
+    }
 }

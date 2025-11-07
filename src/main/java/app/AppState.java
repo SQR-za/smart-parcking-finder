@@ -35,4 +35,7 @@ public class AppState {
     }
 
     public static Reservation lastReservation = null; // يُضبط من ReserveController.confirm()
+    // AppState.java
+    public static boolean forceEmptyReservations = false;
+
 }
